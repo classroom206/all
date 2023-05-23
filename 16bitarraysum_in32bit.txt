@@ -1,0 +1,25 @@
+	AREA ADD16STORE32, CODE, READONLY
+	EXPORT __main
+
+__main
+    LDR R0, =COUNT      ; Load the address of COUNT into R0
+    LDR R1, =ARRAY16    ; Load the address of ARRAY16 into R1
+    MOV R2, #0          ; Initialize R2 with 0
+    LDR R3, [R0]        ; Load the value at the address stored in R0 into R3
+
+LOOP
+    LDRH R4, [R1], #4   ; Load a half-word (16-bit) value from the address stored in R1 into R4, and increment R1 by 2
+    ADD R2, R2, R4      ; Add the value in R4 to R2
+    SUBS R3, R3, #1     ; Decrement R3 by 1 and update the flags
+
+    BNE LOOP            ; Branch to LOOP if the result of the subtraction is not zero
+
+    STR R2, [R1]        ; Store the value in R2 at the address stored in R1
+
+STOP B STOP              ; Infinite loop to halt the program
+
+	AREA INPUT, DATA, READWRITE
+
+COUNT DCD 0x0
+ARRAY16 DCD 0x0
+	END
